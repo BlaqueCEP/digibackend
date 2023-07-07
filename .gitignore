@@ -31,4 +31,8 @@ build/
 .vscode/
 
 ### resources files ###
+application.properties
+application-dev.properties
+application-prod.properties
+application.yml
 ./src/main/resources/
