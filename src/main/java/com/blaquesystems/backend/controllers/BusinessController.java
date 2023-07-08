@@ -24,8 +24,17 @@ public class BusinessController {
     @Autowired
     UserRepository userRepository;
 
+    @Operation(
+            description = "Business create and tie it to a user",
+            summary = "This is an endpoint creating business and tie it to a user",
+            responses = {
+                    @ApiResponse(description = "Success", responseCode = "200"),
+                    @ApiResponse(description = "Unauthorized / Invalid Token", responseCode = "401")
+            }
+
+    )
     @PostMapping("/create/{id}")
-    public ResponseEntity<?> create(@RequestBody Business business, @PathVariable("id") Long id){
+    public ResponseEntity<?> create(@RequestBody Business business, @PathVariable("id") Long id) {
         if (businessRepository.existsByName(business.getName())) {
             return ResponseEntity
                     .badRequest()
@@ -39,15 +48,15 @@ public class BusinessController {
                     .badRequest()
                     .body(new MessageResponse("Error: contact  already in use!"));
         }
-        if (!Objects.nonNull(userRepository.findById(id).get())){
+        if (!Objects.nonNull(userRepository.findById(id).get())) {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: User does not exist!"));
         }
         Date date = new Date();
         business.setCreatedAt(date);
         business.setUpdatedAt(date);
         business.setUser(userRepository.findById(id).get());
-       return ResponseEntity.ok(businessRepository.save(business));
-    };
+        return ResponseEntity.ok(businessRepository.save(business));
+    }
 
     @Operation(
             description = "Business update",
@@ -59,9 +68,9 @@ public class BusinessController {
 
     )
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@RequestBody Business business, @PathVariable("id") Long id){
+    public ResponseEntity<?> update(@RequestBody Business business, @PathVariable("id") Long id) {
 
-        if (!Objects.nonNull(businessRepository.findById(id).get())){
+        if (!Objects.nonNull(businessRepository.findById(id).get())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Business does not exist!"));
@@ -83,22 +92,22 @@ public class BusinessController {
         Date date = new Date();
         business.setUpdatedAt(date);
         return ResponseEntity.ok(businessRepository.save(business));
-    };
+    }
 
-//    To Do: Add media upload
-@Operation(
-        description = "Business add avatar",
-        summary = "This is an endpoint for add avatar to business",
-        responses = {
-                @ApiResponse(description = "Success", responseCode = "200"),
-                @ApiResponse(description = "Unauthorized / Invalid Token", responseCode = "401")
-        }
+    //    To Do: Add media upload
+    @Operation(
+            description = "Business add avatar",
+            summary = "This is an endpoint for add avatar to business",
+            responses = {
+                    @ApiResponse(description = "Success", responseCode = "200"),
+                    @ApiResponse(description = "Unauthorized / Invalid Token", responseCode = "401")
+            }
 
-)
+    )
     @PutMapping("/update/avatar/{id}")
-    public ResponseEntity<?> updateAvatar(@RequestBody Business business, @PathVariable("id") Long id){
+    public ResponseEntity<?> updateAvatar(@RequestBody Business business, @PathVariable("id") Long id) {
 
-        if (!Objects.nonNull(businessRepository.findById(id).get())){
+        if (!Objects.nonNull(businessRepository.findById(id).get())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Business does not exist!"));
@@ -120,7 +129,7 @@ public class BusinessController {
         Date date = new Date();
         business.setUpdatedAt(date);
         return ResponseEntity.ok(businessRepository.save(business));
-    };
+    }
 
     @Operation(
             description = "Business list one",
@@ -132,16 +141,18 @@ public class BusinessController {
 
     )
     @GetMapping("/list/{id}")
-    public ResponseEntity<?> findOne(@PathVariable("id") Long id){
+    public ResponseEntity<?> findOne(@PathVariable("id") Long id) {
 
-        if (!Objects.nonNull(businessRepository.findById(id).get())){
+        if (!Objects.nonNull(businessRepository.findById(id).get())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Business does not exist!"));
         }
 
         return ResponseEntity.ok(businessRepository.findById(id).get());
-    };
+    }
+
+    ;
 
     @Operation(
             description = "Business list all",
@@ -153,16 +164,16 @@ public class BusinessController {
 
     )
     @GetMapping("/list")
-    public ResponseEntity<?> findALl(){
+    public ResponseEntity<?> findALl() {
 
-        if (!Objects.nonNull(businessRepository.findAll())){
+        if (!Objects.nonNull(businessRepository.findAll())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("No Businesses found!"));
         }
 
         return ResponseEntity.ok(businessRepository.findAll());
-    };
+    }
 
     @Operation(
             description = "Business delete one",
@@ -174,9 +185,9 @@ public class BusinessController {
 
     )
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteOne(@PathVariable("id") Long id){
+    public ResponseEntity<?> deleteOne(@PathVariable("id") Long id) {
 
-        if (!Objects.nonNull(businessRepository.findById(id).get())){
+        if (!Objects.nonNull(businessRepository.findById(id).get())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Business does not exist!"));
@@ -184,7 +195,7 @@ public class BusinessController {
         businessRepository.deleteById(id);
 
         return ResponseEntity.ok().body(new MessageResponse("Business deleted successfully!"));
-    };
+    }
 
     @Operation(
             description = "Business delete all",
@@ -196,9 +207,9 @@ public class BusinessController {
 
     )
     @DeleteMapping("/list/delete")
-    public ResponseEntity<?> deleteAll(){
+    public ResponseEntity<?> deleteAll() {
         businessRepository.deleteAll();
 
         return ResponseEntity.ok().body(new MessageResponse("All Businesses deleted successfully!"));
-    };
+    }
 }
