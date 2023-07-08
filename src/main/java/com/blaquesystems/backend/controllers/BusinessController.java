@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.Objects;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600, allowCredentials="true")
 @RestController
 @RequestMapping("/api/business")
 public class BusinessController {
