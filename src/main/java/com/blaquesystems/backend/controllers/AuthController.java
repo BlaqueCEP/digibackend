@@ -1,5 +1,9 @@
 package com.blaquesystems.backend.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -54,6 +58,15 @@ public class AuthController {
     @Autowired
     MediaUpload mediaUpload;
 
+    @Operation(
+            description = "User login",
+            summary = "This is an endpoint for logging in to the system",
+            responses = {
+                    @ApiResponse(description = "Success", responseCode = "200"),
+                    @ApiResponse(description = "Unauthorized / Invalid Token", responseCode = "401")
+            }
+
+    )
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -78,6 +91,15 @@ public class AuthController {
                 roles));
     }
 
+    @Operation(
+            description = "User Registration",
+            summary = "This is an endpoint for registration in to the system",
+            responses = {
+                    @ApiResponse(description = "Success", responseCode = "200"),
+                    @ApiResponse(description = "Unauthorized / Invalid Token", responseCode = "401")
+            }
+
+    )
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
@@ -141,13 +163,23 @@ public class AuthController {
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
+    @Operation(
+            description = "User Media Upload",
+            summary = "This is an endpoint for media upload",
+            responses = {
+                    @ApiResponse(description = "Success", responseCode = "200"),
+                    @ApiResponse(description = "Unauthorized / Invalid Token", responseCode = "401")
+            }
+
+    )
     @PostMapping("/upload")
-    public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile file, @RequestParam("type") String type) {
         try {
             // Upload the image to Cloudinary
             String url = mediaUpload.uploadMedia(file);
             Map<String, Object> uploadResult = new HashMap<>();
             uploadResult.put("url", url);
+            uploadResult.put("type", type);
 
             // You can perform further operations or return the URL as a response
             return ResponseEntity.ok(uploadResult);
