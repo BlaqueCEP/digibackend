@@ -26,11 +26,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+<<<<<<< HEAD
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600, allowCredentials="true")
+=======
+import javax.swing.*;
+
+@CrossOrigin(origins = "*", maxAge = 3600)
+>>>>>>> master
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -63,7 +69,6 @@ public class AuthController {
     )
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
